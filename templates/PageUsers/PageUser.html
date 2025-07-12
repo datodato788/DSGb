@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% set active_page = 'PageUsers' %}
+{% block title %}{{ user.username }}'s Profile - DSGBase{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='PageUser-css/style.css') }}" />
+{% endblock %}
+
+{% block location %}{{ user.username }}'s Profile{% endblock %}
+
+{% block content %}
+<div class="main-div">
+  <div class="user-header">
+    <div class="profile-image">
+      <img src="{{ url_for('static', filename='images/' + user.img) if user.img else url_for('static', filename='images/default-profile.png') }}" 
+           alt="{{ user.username }}'s profile picture"
+           id="profileImage"/>
+    </div>
+    <div class="name-colors">
+      <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+      <p>@{{ user.username }}</p>
+      <p>Member since {{ user.created_at.strftime('%B %Y') }}</p>
+    </div>
+  </div>
+
+  <div class="user-main">
+    <div class="user-status">
+      <h3>User Status</h3>
+      <ul>
+        <li><strong>Role:</strong> {{ user.role|capitalize }}</li>
+        <li><strong>Registered on:</strong> {{ user.created_at.strftime('%Y-%m-%d') }}</li>
+        {% if user.last_login %}
+        <li><strong>Last login:</strong> {{ user.last_login.strftime('%Y-%m-%d %H:%M') }}</li>
+        {% endif %}
+      </ul>
+    </div>
+
+    <div class="user-info">
+      <h3>Personal Info</h3>
+      <ul>
+        <li><strong>First Name:</strong> {{ user.first_name or '—' }}</li>
+        <li><strong>Last Name:</strong> {{ user.last_name or '—' }}</li>
+        <li><strong>Email:</strong> {{ user.email }}</li>
+        <li><strong>Region:</strong> {{ user.region or '—' }}</li>
+      </ul>
+    </div>
+  </div>
+
+  {% if current_user.id == user.id or current_user.role == 'admin' %}
+  <div class="edit-toggle-container">
+    <button class="edit-toggle-btn" id="editToggleBtn">Edit Profile</button>
+  </div>
+
+  <div class="edit-profile-wrapper hidden" id="editForm">
+<form method="POST" action="{{ url_for('profile.update_user_by_admin', user_id=user.id) }}" enctype="multipart/form-data">
+      <input type="file" name="img" id="imgInput" accept="image/*" style="display: none"/>
+      
+      <label for="first_name">First Name</label>
+      <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}" required>
+      
+      <label for="last_name">Last Name</label>
+      <input type="text" name="last_name" id="last_name" value="{{ user.last_name }}" required>
+      
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" value="{{ user.email }}" required>
+      
+      <label for="region">Region</label>
+      <select name="region" id="region">
+        <option value="">Select region</option>
+        {% for region in ['Tbilisi', 'Kutaisi', 'Batumi', 'Zugdidi', 'Rustavi', 'Other'] %}
+          <option value="{{ region }}" {% if user.region == region %}selected{% endif %}>{{ region }}</option>
+        {% endfor %}
+      </select>
+       <label for="role">Role</label>
+    <select name="role" id="role">
+      <option value="member" {% if user.role == 'member' %}selected{% endif %}>Member</option>
+      <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+    </select>
+      
+      <button type="submit">Save Changes</button>
+    </form>
+  </div>
+  {% endif %}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const editToggleBtn = document.getElementById('editToggleBtn');
+    const editForm = document.getElementById('editForm');
+    const imgInput = document.getElementById('imgInput');
+    const profileImage = document.getElementById('profileImage');
+    
+    editToggleBtn.addEventListener('click', function() {
+      editForm.classList.toggle('hidden');
+      this.textContent = editForm.classList.contains('hidden') 
+        ? 'Edit Profile' 
+        : 'Cancel Editing';
+    });
+
+    profileImage.addEventListener('click', function() {
+      imgInput.click();
+    });
+    
+    imgInput.addEventListener('change', function(e) {
+      if (e.target.files && e.target.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          profileImage.src = event.target.result;
+        };
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    });
+  });
+</script>
+{% endblock %}

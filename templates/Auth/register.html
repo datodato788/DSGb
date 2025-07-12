@@ -1,0 +1,71 @@
+<form method="POST" action="{{ url_for('auth.register') }}">
+  {{ register_form.hidden_tag() }}
+
+  <div>
+    {{ register_form.first_name.label }} {{ register_form.first_name() }}
+    {% if register_form.first_name.errors %}
+    <ul class="error-list">
+      {% for error in register_form.first_name.errors %}
+      <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+
+  <div>
+    {{ register_form.last_name.label }} {{ register_form.last_name() }}
+    {% if register_form.last_name.errors %}
+    <ul class="error-list">
+      {% for error in register_form.last_name.errors %}
+      <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+
+  <div>
+    {{ register_form.email.label }} {{ register_form.email() }}
+    {% if register_form.email.errors %}
+    <ul class="error-list">
+      {% for error in register_form.email.errors %}
+      <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+
+  <div>
+    {{ register_form.username.label }} {{ register_form.username() }}
+    {% if register_form.username.errors %}
+    <ul class="error-list">
+      {% for error in register_form.username.errors %}
+      <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+
+  <div>
+    {{ register_form.password.label }} {{ register_form.password() }}
+    {% if register_form.password.errors %}
+    <ul class="error-list">
+      {% for error in register_form.password.errors %}
+      <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+
+  <div>
+    {{ register_form.confirm_password.label }} {{ register_form.confirm_password() }}
+    {% if register_form.confirm_password.errors %}
+    <ul class="error-list">
+      {% for error in register_form.confirm_password.errors %}
+      <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+
+  <button type="submit">Register</button>
+</form>
