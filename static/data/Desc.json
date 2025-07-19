@@ -1,0 +1,13 @@
+{
+  "total_customers": 1234,
+  "total_revenue": 56789.99,
+  "total_transactions": 4321,
+  "region_distribution": {
+    "Tbilisi": 1200,
+    "Kutaisi": 300,
+    "Batumi": 250
+  },
+  "top_region": "Tbilisi",
+  "top_surname": "Beridze",
+  "top_name": "Giorgi"
+}
